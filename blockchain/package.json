@@ -1,0 +1,33 @@
+{
+  "name": "ecoconnect-blockchain",
+  "version": "1.0.0",
+  "description": "Smart contracts for EcoConnect Green Product Passport",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.js",
+    "deploy:mumbai": "hardhat run scripts/deploy.js --network mumbai",
+    "deploy:polygon": "hardhat run scripts/deploy.js --network polygon",
+    "verify": "hardhat verify",
+    "node": "hardhat node"
+  },
+  "keywords": [
+    "blockchain",
+    "nft",
+    "sustainability",
+    "esg"
+  ],
+  "author": "EcoConnect Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.2"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.1",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.9.0",
+    "ipfs-http-client": "^60.0.1"
+  }
+}

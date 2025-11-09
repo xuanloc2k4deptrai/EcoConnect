@@ -1,0 +1,57 @@
+{
+  "name": "ecoconnect",
+  "version": "1.0.0",
+  "description": "Nền tảng hệ sinh thái xanh toàn diện",
+  "private": true,
+  "workspaces": [
+    "frontend-web",
+    "mobile-app",
+    "backend-api",
+    "ai-service",
+    "blockchain",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:ai\"",
+    "dev:backend": "cd backend-api && npm run dev",
+    "dev:frontend": "cd frontend-web && npm run dev",
+    "dev:mobile": "cd mobile-app && npm start",
+    "dev:ai": "cd ai-service && python -m uvicorn main:app --reload",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend-api && npm run build",
+    "build:frontend": "cd frontend-web && npm run build",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend-api && npm test",
+    "test:frontend": "cd frontend-web && npm test",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:build": "docker-compose build"
+  },
+  "keywords": [
+    "ecoconnect",
+    "sustainability",
+    "green",
+    "esg",
+    "blockchain",
+    "ai"
+  ],
+  "author": "EcoConnect Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

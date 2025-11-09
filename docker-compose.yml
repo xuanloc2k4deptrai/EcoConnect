@@ -1,0 +1,155 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    container_name: ecoconnect-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: ecoconnect
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./infrastructure/mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - ecoconnect-network
+
+  # PostgreSQL for Analytics
+  postgres:
+    image: postgres:15
+    container_name: ecoconnect-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ecoconnect
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: ecoconnect_analytics
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ecoconnect-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: ecoconnect-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ecoconnect-network
+
+  # RabbitMQ Message Queue
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: ecoconnect-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: password123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - ecoconnect-network
+
+  # Backend API
+  backend-api:
+    build:
+      context: ./backend-api
+      dockerfile: Dockerfile
+    container_name: ecoconnect-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      MONGODB_URI: mongodb://admin:password123@mongodb:27017/ecoconnect?authSource=admin
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL: amqp://admin:password123@rabbitmq:5672
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongodb
+      - redis
+      - rabbitmq
+    volumes:
+      - ./backend-api:/app
+      - /app/node_modules
+    networks:
+      - ecoconnect-network
+
+  # AI Service
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: ecoconnect-ai
+    restart: unless-stopped
+    environment:
+      PYTHONUNBUFFERED: 1
+      PORT: 8000
+      MONGODB_URI: mongodb://admin:password123@mongodb:27017/ecoconnect?authSource=admin
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    volumes:
+      - ./ai-service:/app
+    networks:
+      - ecoconnect-network
+
+  # Frontend Web
+  frontend-web:
+    build:
+      context: ./frontend-web
+      dockerfile: Dockerfile
+      target: development
+    container_name: ecoconnect-frontend
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:4000/api
+      NEXT_PUBLIC_AI_SERVICE_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend-api
+    volumes:
+      - ./frontend-web:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - ecoconnect-network
+
+  # IPFS Node (for NFT metadata)
+  ipfs:
+    image: ipfs/kubo:latest
+    container_name: ecoconnect-ipfs
+    restart: unless-stopped
+    ports:
+      - "4001:4001"
+      - "5001:5001"
+      - "8080:8080"
+    volumes:
+      - ipfs_data:/data/ipfs
+    networks:
+      - ecoconnect-network
+
+networks:
+  ecoconnect-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  ipfs_data:
