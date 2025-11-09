@@ -24,7 +24,7 @@ export function useProducts(filters?: FilterOptions) {
         ...filters,
         page: pagination.page,
         limit: pagination.limit,
-      }) as PaginatedResponse<Product>;
+      }) as unknown as PaginatedResponse<Product>;
       setProducts(response.data);
       setPagination(response.pagination);
       setError(null);
