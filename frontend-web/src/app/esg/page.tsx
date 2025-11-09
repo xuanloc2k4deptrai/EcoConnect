@@ -129,10 +129,10 @@ export default function ESGDashboardPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
             <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-medium mb-4">
-              📊 Real-time ESG Monitoring
+              📊 Theo dõi ESG thời gian thực
             </div>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              ESG Performance Dashboard
+              Bảng điều khiển ESG
             </h1>
             <p className="text-xl text-gray-100 mb-6">
               Theo dõi và đánh giá hiệu suất môi trường, xã hội và quản trị doanh nghiệp của bạn
@@ -142,19 +142,19 @@ export default function ESGDashboardPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">{esgData.overall}</div>
-                <div className="text-sm text-gray-200">Overall Score</div>
+                <div className="text-sm text-gray-200">Tổng điểm</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold text-green-300">{esgData.environmental}</div>
-                <div className="text-sm text-gray-200">Environmental</div>
+                <div className="text-sm text-gray-200">Môi trường</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold text-blue-300">{esgData.social}</div>
-                <div className="text-sm text-gray-200">Social</div>
+                <div className="text-sm text-gray-200">Xã hội</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold text-purple-300">{esgData.governance}</div>
-                <div className="text-sm text-gray-200">Governance</div>
+                <div className="text-sm text-gray-200">Quản trị</div>
               </div>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function ESGDashboardPage() {
             <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <span className="font-semibold text-gray-700">Timeframe:</span>
+            <span className="font-semibold text-gray-700">Khung thời gian:</span>
           </div>
           <div className="flex gap-2">
             {(['month', 'quarter', 'year'] as const).map((period) => (
@@ -195,7 +195,7 @@ export default function ESGDashboardPage() {
           <div className="bg-gradient-to-r from-green-500 to-green-400 text-white rounded-t-xl p-4">
             <h2 className="text-2xl font-bold flex items-center gap-3">
               <span className="text-3xl">🌱</span> 
-              <span>Environmental Metrics</span>
+              <span>Chỉ số Môi trường</span>
             </h2>
             <p className="text-green-100 text-sm mt-1">Impact trên môi trường và tài nguyên thiên nhiên</p>
           </div>
@@ -213,7 +213,7 @@ export default function ESGDashboardPage() {
           <div className="bg-gradient-to-r from-blue-500 to-blue-400 text-white rounded-t-xl p-4">
             <h2 className="text-2xl font-bold flex items-center gap-3">
               <span className="text-3xl">👥</span>
-              <span>Social Metrics</span>
+              <span>Chỉ số Xã hội</span>
             </h2>
             <p className="text-blue-100 text-sm mt-1">Tác động xã hội và phát triển nhân sự</p>
           </div>
@@ -231,7 +231,7 @@ export default function ESGDashboardPage() {
           <div className="bg-gradient-to-r from-purple-500 to-purple-400 text-white rounded-t-xl p-4">
             <h2 className="text-2xl font-bold flex items-center gap-3">
               <span className="text-3xl">⚖️</span>
-              <span>Governance Metrics</span>
+              <span>Chỉ số Quản trị</span>
             </h2>
             <p className="text-purple-100 text-sm mt-1">Quản trị doanh nghiệp và tuân thủ</p>
           </div>
@@ -249,7 +249,7 @@ export default function ESGDashboardPage() {
           <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6">
             <h3 className="text-2xl font-bold flex items-center gap-3">
               <span className="text-3xl">💡</span>
-              <span>AI-Powered Insights & Recommendations</span>
+              <span>Phân tích & Đề xuất từ AI</span>
             </h3>
             <p className="text-amber-100 text-sm mt-1">Phân tích thông minh và đề xuất cải tiến</p>
           </div>

@@ -6,39 +6,39 @@ const Footer: React.FC = () => {
 
   const footerSections = [
     {
-      title: 'Platform',
+      title: 'Nền tảng',
       links: [
-        { label: 'Marketplace', href: '/marketplace' },
-        { label: 'ESG Dashboard', href: '/esg' },
-        { label: 'Carbon Wallet', href: '/carbon-wallet' },
-        { label: 'Challenges', href: '/challenges' },
+        { label: 'Chợ xanh', href: '/marketplace' },
+        { label: 'Bảng điều khiển ESG', href: '/esg' },
+        { label: 'Ví Carbon', href: '/carbon-wallet' },
+        { label: 'Thử thách', href: '/challenges' },
       ],
     },
     {
-      title: 'Company',
+      title: 'Công ty',
       links: [
-        { label: 'About Us', href: '/about' },
+        { label: 'Về chúng tôi', href: '/about' },
         { label: 'Blog', href: '/blog' },
-        { label: 'Careers', href: '/careers' },
-        { label: 'Contact', href: '/contact' },
+        { label: 'Tuyển dụng', href: '/careers' },
+        { label: 'Liên hệ', href: '/contact' },
       ],
     },
     {
-      title: 'Resources',
+      title: 'Tài nguyên',
       links: [
-        { label: 'Documentation', href: '/docs' },
+        { label: 'Tài liệu', href: '/docs' },
         { label: 'API', href: '/api' },
-        { label: 'Help Center', href: '/help' },
-        { label: 'Community', href: '/community' },
+        { label: 'Trung tâm hỗ trợ', href: '/help' },
+        { label: 'Cộng đồng', href: '/community' },
       ],
     },
     {
-      title: 'Legal',
+      title: 'Pháp lý',
       links: [
-        { label: 'Privacy Policy', href: '/privacy' },
-        { label: 'Terms of Service', href: '/terms' },
-        { label: 'Cookie Policy', href: '/cookies' },
-        { label: 'Compliance', href: '/compliance' },
+        { label: 'Chính sách bảo mật', href: '/privacy' },
+        { label: 'Điều khoản dịch vụ', href: '/terms' },
+        { label: 'Chính sách Cookie', href: '/cookies' },
+        { label: 'Tuân thủ', href: '/compliance' },
       ],
     },
   ];
@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
               <span className="text-xl font-bold text-white">EcoConnect</span>
             </div>
             <p className="text-sm text-gray-400 mb-4">
-              Building a sustainable future through green technology and conscious commerce.
+              Xây dựng tương lai bền vững thông qua công nghệ xanh và thương mại có trách nhiệm.
             </p>
             {/* Social Links */}
             <div className="flex space-x-4">
@@ -103,10 +103,10 @@ const Footer: React.FC = () => {
         <div className="pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-gray-400">
-              © {currentYear} EcoConnect. All rights reserved.
+              © {currentYear} EcoConnect. Bản quyền đã được bảo hộ.
             </p>
             <div className="flex items-center space-x-4 mt-4 md:mt-0">
-              <span className="text-sm text-gray-400">Made with 💚 for the Planet</span>
+              <span className="text-sm text-gray-400">Được tạo với 💚 vì Hành tinh</span>
             </div>
           </div>
         </div>

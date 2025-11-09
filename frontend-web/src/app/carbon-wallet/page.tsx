@@ -96,7 +96,7 @@ export default function CarbonWalletPage() {
               💰 Ví Carbon Credits
             </div>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              Carbon Wallet
+              Ví Carbon
             </h1>
             <p className="text-xl text-gray-100">
               Theo dõi, quản lý và bù trừ dấu chân carbon của bạn một cách dễ dàng

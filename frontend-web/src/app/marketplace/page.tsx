@@ -105,7 +105,7 @@ export default function MarketplacePage() {
               🌿 100% Sản phẩm xác thực bởi Blockchain
             </div>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              Green Marketplace
+              Chợ Xanh
             </h1>
             <p className="text-xl text-gray-100">
               Khám phá hàng nghìn sản phẩm bền vững được xác thực bởi công nghệ blockchain

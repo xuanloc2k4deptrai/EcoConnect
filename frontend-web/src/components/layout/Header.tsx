@@ -11,10 +11,10 @@ const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // TODO: Replace with actual auth state
 
   const navItems = [
-    { href: '/marketplace', label: 'Marketplace' },
-    { href: '/esg', label: 'ESG Dashboard' },
-    { href: '/carbon-wallet', label: 'Carbon Wallet' },
-    { href: '/challenges', label: 'Challenges' },
+    { href: '/marketplace', label: 'Chợ xanh' },
+    { href: '/esg', label: 'Bảng điều khiển ESG' },
+    { href: '/carbon-wallet', label: 'Ví Carbon' },
+    { href: '/challenges', label: 'Thử thách' },
   ];
 
   return (
@@ -55,19 +55,19 @@ const Header: React.FC = () => {
                   <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
                 </div>
                 <Button variant="outline" size="sm">
-                  Profile
+                  Hồ sơ
                 </Button>
               </>
             ) : (
               <>
                 <Link href="/login">
                   <Button variant="ghost" size="sm">
-                    Login
+                    Đăng nhập
                   </Button>
                 </Link>
                 <Link href="/register">
                   <Button variant="primary" size="sm">
-                    Sign Up
+                    Đăng ký
                   </Button>
                 </Link>
               </>
@@ -126,15 +126,15 @@ const Header: React.FC = () => {
             <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
               {isLoggedIn ? (
                 <Button variant="outline" size="sm" className="w-full">
-                  Profile
+                  Hồ sơ
                 </Button>
               ) : (
                 <>
                   <Button variant="ghost" size="sm" className="w-full">
-                    Login
+                    Đăng nhập
                   </Button>
                   <Button variant="primary" size="sm" className="w-full">
-                    Sign Up
+                    Đăng ký
                   </Button>
                 </>
               )}

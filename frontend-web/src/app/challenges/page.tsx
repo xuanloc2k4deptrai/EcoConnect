@@ -177,7 +177,7 @@ export default function ChallengesPage() {
               🏆 Cộng đồng xanh toàn cầu
             </div>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              Green Challenges
+              Thử thách Xanh
             </h1>
             <p className="text-xl text-gray-100 mb-6">
               Tham gia thử thách, tích điểm thưởng và tạo ra sự khác biệt cho hành tinh
@@ -187,19 +187,19 @@ export default function ChallengesPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">45</div>
-                <div className="text-sm text-gray-200">Challenges</div>
+                <div className="text-sm text-gray-200">Thử thách</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">12K+</div>
-                <div className="text-sm text-gray-200">Participants</div>
+                <div className="text-sm text-gray-200">Người tham gia</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">250K</div>
-                <div className="text-sm text-gray-200">Points</div>
+                <div className="text-sm text-gray-200">Điểm</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">50 tấn</div>
-                <div className="text-sm text-gray-200">CO₂ Saved</div>
+                <div className="text-sm text-gray-200">CO₂ tiết kiệm</div>
               </div>
             </div>
           </div>
