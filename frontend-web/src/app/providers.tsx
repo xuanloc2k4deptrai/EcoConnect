@@ -2,11 +2,14 @@
 
 import React from 'react';
 import { AuthProvider } from '@/context/AuthContext';
+import { CartProvider } from '@/context/CartContext';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
-      {children}
+      <CartProvider>
+        {children}
+      </CartProvider>
     </AuthProvider>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import ProductCard from '@/components/marketplace/ProductCard';
+import ProductDetailModal from '@/components/marketplace/ProductDetailModal';
 import FilterBar from '@/components/marketplace/FilterBar';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Button from '@/components/ui/Button';
@@ -13,6 +14,7 @@ export default function MarketplacePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [filters, setFilters] = useState<FilterOptions>({
     sortBy: 'newest',
     sortOrder: 'desc',
@@ -32,17 +34,116 @@ export default function MarketplacePage() {
     try {
       setLoading(true);
       
-      // Mock data for development (since backend is not running)
-      const mockProducts: Product[] = Array.from({ length: 12 }, (_, i) => ({
+      // Mock data for development với sản phẩm đa dạng
+      const productTemplates = [
+        {
+          name: 'Áo Thun Cotton Organic',
+          description: 'Áo thun cotton hữu cơ 100%, không thuốc nhuộm độc hại, sản xuất theo tiêu chuẩn Fair Trade',
+          category: 'Fashion',
+          price: 350000,
+          images: ['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab'],
+          certifications: ['Organic', 'Fair Trade', 'Carbon Neutral'],
+        },
+        {
+          name: 'Túi Tote Vải Tái Chế',
+          description: 'Túi vải làm từ 100% nhựa tái chế từ đại dương, thiết kế thời trang, bền đẹp',
+          category: 'Fashion',
+          price: 250000,
+          images: ['https://images.unsplash.com/photo-1590874103328-eac38a683ce7'],
+          certifications: ['Fair Trade', 'Carbon Neutral'],
+        },
+        {
+          name: 'Laptop Dell Tái Chế',
+          description: 'Laptop Dell làm từ nhựa tái chế, tiết kiệm năng lượng 40%, đạt chứng nhận Energy Star',
+          category: 'Electronics',
+          price: 15000000,
+          images: ['https://images.unsplash.com/photo-1496181133206-80ce9b88a853'],
+          certifications: ['Energy Star', 'B Corp'],
+        },
+        {
+          name: 'Giày Thể Thao Xanh',
+          description: 'Giày làm từ vật liệu tái chế và cao su thiên nhiên, thoải mái, bền bỉ',
+          category: 'Sports & Outdoors',
+          price: 1200000,
+          images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff'],
+          certifications: ['Carbon Neutral', 'Fair Trade'],
+        },
+        {
+          name: 'Bàn Làm Việc Tre',
+          description: 'Bàn làm từ tre tự nhiên, chứng nhận FSC, thiết kế tối giản, bền vững',
+          category: 'Home & Garden',
+          price: 3500000,
+          images: ['https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd'],
+          certifications: ['FSC Certified', 'Carbon Neutral'],
+        },
+        {
+          name: 'Dầu Gội Organic',
+          description: 'Dầu gội từ thảo mộc hữu cơ, không paraben, không thử nghiệm trên động vật',
+          category: 'Beauty & Personal Care',
+          price: 280000,
+          images: ['https://images.unsplash.com/photo-1556228720-195a672e8a03'],
+          certifications: ['Organic', 'Cruelty Free'],
+        },
+        {
+          name: 'Cà Phê Hữu Cơ',
+          description: 'Cà phê Arabica hữu cơ 100%, Fair Trade, hỗ trợ nông dân địa phương',
+          category: 'Food & Beverage',
+          price: 350000,
+          images: ['https://images.unsplash.com/photo-1559056199-641a0ac8b55e'],
+          certifications: ['Organic', 'Fair Trade', 'Rainforest Alliance'],
+        },
+        {
+          name: 'Bình Nước Inox',
+          description: 'Bình giữ nhiệt inox 304, không BPA, giữ nhiệt 24h, giảm rác thải nhựa',
+          category: 'Home & Garden',
+          price: 450000,
+          images: ['https://images.unsplash.com/photo-1602143407151-7111542de6e8'],
+          certifications: ['Carbon Neutral', 'B Corp'],
+        },
+        {
+          name: 'Sổ Tay Giấy Tái Chế',
+          description: 'Sổ tay từ giấy tái chế 100%, bìa cứng bảo vệ rừng, thiết kế đẹp mắt',
+          category: 'Office Supplies',
+          price: 120000,
+          images: ['https://images.unsplash.com/photo-1517842645767-c639042777db'],
+          certifications: ['FSC Certified', 'Carbon Neutral'],
+        },
+        {
+          name: 'Kem Chống Nắng Mineral',
+          description: 'Kem chống nắng khoáng chất, không hóa chất độc hại, thân thiện với san hô',
+          category: 'Beauty & Personal Care',
+          price: 380000,
+          images: ['https://images.unsplash.com/photo-1556228578-0d85b1a4d571'],
+          certifications: ['Organic', 'Cruelty Free', 'Rainforest Alliance'],
+        },
+        {
+          name: 'Balo Leo Núi Eco',
+          description: 'Balo từ vải tái chế, chống nước, thiết kế ergonomic, lý tưởng cho dã ngoại',
+          category: 'Sports & Outdoors',
+          price: 850000,
+          images: ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62'],
+          certifications: ['Fair Trade', 'Carbon Neutral'],
+        },
+        {
+          name: 'Đèn LED Năng Lượng Mặt Trời',
+          description: 'Đèn LED sạc bằng năng lượng mặt trời, tiết kiệm điện, không phát thải CO2',
+          category: 'Home & Garden',
+          price: 650000,
+          images: ['https://images.unsplash.com/photo-1513506003901-1e6a229e2d15'],
+          certifications: ['Energy Star', 'Carbon Neutral', 'B Corp'],
+        },
+      ];
+
+      const mockProducts: Product[] = productTemplates.map((template, i) => ({
         _id: `product-${i + 1}`,
-        name: `Eco Product ${i + 1}`,
-        description: 'Sản phẩm xanh thân thiện với môi trường, được xác thực bởi blockchain',
-        category: ['Fashion', 'Lifestyle', 'Electronics'][i % 3],
-        price: 20 + (i * 5),
-        images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30'],
+        name: template.name,
+        description: template.description,
+        category: template.category,
+        price: template.price,
+        images: template.images,
         seller: {
           id: `seller-${i + 1}`,
-          name: `Green Shop ${i + 1}`,
+          name: ['EcoShop Việt Nam', 'Green Life Store', 'Xanh Organic', 'Bền Vững Shop', 'Nature Market'][i % 5],
           rating: 4.5 + (i % 5) / 10
         },
         esgScore: {
@@ -57,7 +158,7 @@ export default function MarketplacePage() {
           packaging: 0.3,
           total: 2 + (i % 4)
         },
-        certifications: ['Organic', 'Fair Trade', 'Carbon Neutral'].slice(0, (i % 3) + 1),
+        certifications: template.certifications,
         blockchainVerified: i % 2 === 0,
         stock: 50 + (i * 10),
         sold: i * 20,
@@ -219,7 +320,11 @@ export default function MarketplacePage() {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {products.map((product) => (
-                    <ProductCard key={product._id} product={product} />
+                    <ProductCard 
+                      key={product._id} 
+                      product={product}
+                      onClick={() => setSelectedProduct(product)}
+                    />
                   ))}
                 </div>
 
@@ -288,6 +393,15 @@ export default function MarketplacePage() {
           </div>
         </div>
       </div>
+
+      {/* Product Detail Modal */}
+      {selectedProduct && (
+        <ProductDetailModal
+          product={selectedProduct}
+          isOpen={!!selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
     </div>
   );
 }

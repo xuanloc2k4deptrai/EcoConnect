@@ -159,6 +159,7 @@ export interface FilterOptions {
   minPrice?: number;
   maxPrice?: number;
   minESG?: number;
+  maxCarbonFootprint?: number;
   certifications?: string[];
   blockchainVerified?: boolean;
   sortBy?: 'price' | 'esg' | 'rating' | 'newest';

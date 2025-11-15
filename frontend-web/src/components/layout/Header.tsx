@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Button from '../ui/Button';
+import CartIcon from '../cart/CartIcon';
 
 const Header: React.FC = () => {
   const pathname = usePathname();
@@ -50,6 +51,9 @@ const Header: React.FC = () => {
 
           {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
+            {/* Shopping Cart */}
+            <CartIcon />
+            
             {isLoggedIn ? (
               <>
                 <div className="flex items-center space-x-2">

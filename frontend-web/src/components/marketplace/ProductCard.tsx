@@ -1,6 +1,7 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Card, CardBody, CardFooter } from '../ui/Card';
 import Badge from '../ui/Badge';
 import { Product } from '@/types';
@@ -8,12 +9,17 @@ import { formatCurrency, getESGColor } from '@/lib/utils';
 
 interface ProductCardProps {
   product: Product;
+  onClick?: () => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
+  const handleClick = () => {
+    if (onClick) onClick();
+  };
+
   return (
-    <Link href={`/marketplace/${product._id}`}>
-      <Card hover className="h-full flex flex-col">
+    <div onClick={handleClick} className="cursor-pointer">
+      <Card hover className="h-full flex flex-col transition-all hover:shadow-2xl hover:scale-105">
         {/* Product Image */}
         <div className="relative h-48 w-full overflow-hidden">
           <Image
@@ -120,7 +126,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
         </CardFooter>
       </Card>
-    </Link>
+    </div>
   );
 };
 

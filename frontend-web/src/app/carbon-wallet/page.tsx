@@ -167,7 +167,7 @@ export default function CarbonWalletPage() {
 
           {/* Right Column */}
           <div className="lg:col-span-1">
-            <OffsetCalculator onOffset={handleOffset} />
+            <OffsetCalculator onOffset={handleOffset} currentBalance={balance} />
           </div>
         </div>
       </div>

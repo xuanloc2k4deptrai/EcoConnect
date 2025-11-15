@@ -76,14 +76,14 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
 
         {/* Rewards */}
         <div className="grid grid-cols-2 gap-3 mb-4">
-          <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
-            <div className="text-xs text-yellow-800 mb-1">Points</div>
+          <div className="bg-gradient-to-br from-yellow-50 to-amber-50 p-3 rounded-lg border-2 border-yellow-200">
+            <div className="text-xs text-yellow-700 mb-1 font-medium">⭐ Điểm</div>
             <div className="text-xl font-bold text-yellow-900">
               +{challenge.points}
             </div>
           </div>
-          <div className="bg-green-50 p-3 rounded-lg border border-green-200">
-            <div className="text-xs text-green-800 mb-1">Carbon Credits</div>
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-3 rounded-lg border-2 border-green-200">
+            <div className="text-xs text-green-700 mb-1 font-medium">🌱 Credits</div>
             <div className="text-xl font-bold text-green-900">
               +{challenge.carbonCredits} kg
             </div>
@@ -91,9 +91,9 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
         </div>
 
         {/* Requirements */}
-        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-          <div className="text-xs text-gray-600 mb-1">Goal</div>
-          <div className="font-semibold text-gray-900">
+        <div className="mb-4 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
+          <div className="text-xs text-blue-700 mb-1 font-medium">🎯 Mục tiêu</div>
+          <div className="font-semibold text-blue-900">
             {challenge.requirements.target} {challenge.requirements.unit}
           </div>
         </div>
@@ -101,25 +101,34 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
         {/* Participants Progress */}
         {challenge.maxParticipants && (
           <div className="mb-4">
-            <div className="flex justify-between text-xs text-gray-600 mb-1">
-              <span>Participants</span>
-              <span>
-                {challenge.participants} / {challenge.maxParticipants}
+            <div className="flex justify-between text-xs font-medium text-gray-600 mb-2">
+              <span>👥 Người tham gia</span>
+              <span className="text-primary-600">
+                {challenge.participants.toLocaleString()} / {challenge.maxParticipants.toLocaleString()}
               </span>
             </div>
-            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden shadow-inner">
               <div
-                className="h-full bg-primary-600 transition-all duration-300"
+                className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-300"
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
           </div>
         )}
 
+        {!challenge.maxParticipants && (
+          <div className="mb-4 flex items-center gap-2 text-sm text-gray-600">
+            <span>👥</span>
+            <span><strong>{challenge.participants.toLocaleString()}</strong> người đã tham gia</span>
+          </div>
+        )}
+
         {/* Duration */}
-        <div className="text-xs text-gray-500 mb-4">
-          {formatDate(challenge.duration.startDate)} -{' '}
-          {formatDate(challenge.duration.endDate)}
+        <div className="text-xs text-gray-500 mb-4 flex items-center gap-2">
+          <span>📅</span>
+          <span>
+            {formatDate(challenge.duration.startDate)} - {formatDate(challenge.duration.endDate)}
+          </span>
         </div>
 
         {/* Action Button */}
@@ -127,7 +136,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
           {isEnrolled ? (
             <Link href={`/challenges/${challenge._id}`}>
               <Button variant="outline" size="sm" className="w-full">
-                View Progress
+                📊 Xem tiến độ
               </Button>
             </Link>
           ) : challenge.status === 'active' ? (
@@ -135,7 +144,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
               onClick={() => onEnroll && onEnroll(challenge._id)}
               variant="primary"
               size="sm"
-              className="w-full"
+              className="w-full bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600"
               disabled={
                 challenge.maxParticipants
                   ? challenge.participants >= challenge.maxParticipants
@@ -144,12 +153,12 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
             >
               {challenge.maxParticipants &&
               challenge.participants >= challenge.maxParticipants
-                ? 'Full'
-                : 'Enroll Now'}
+                ? '✋ Đã đầy'
+                : '🚀 Tham gia ngay'}
             </Button>
           ) : (
-            <Badge variant={getStatusColor(challenge.status)} className="w-full justify-center">
-              {challenge.status === 'upcoming' ? 'Coming Soon' : 'Ended'}
+            <Badge variant={getStatusColor(challenge.status)} className="w-full justify-center py-2">
+              {challenge.status === 'upcoming' ? '⏳ Sắp diễn ra' : '✅ Đã kết thúc'}
             </Badge>
           )}
         </div>

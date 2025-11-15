@@ -57,7 +57,7 @@ export default function LogisticsPage() {
   const mockShipments = [
     {
       id: 'SH-2024-001',
-      customer: 'Nguyễn Văn A',
+      customer: 'Nguyễn Văn Đức',
       destination: 'Quận Thủ Đức, TP.HCM',
       status: 'in-transit',
       estimatedArrival: '10:45',
@@ -66,7 +66,7 @@ export default function LogisticsPage() {
     },
     {
       id: 'SH-2024-002',
-      customer: 'Trần Thị B',
+      customer: 'Trần Thị Thu Tâm',
       destination: 'Quận 9, TP.HCM',
       status: 'scheduled',
       estimatedArrival: '14:30',
@@ -75,7 +75,7 @@ export default function LogisticsPage() {
     },
     {
       id: 'SH-2024-003',
-      customer: 'Lê Văn C',
+      customer: 'Lê Văn Minh',
       destination: 'Bình Dương',
       status: 'delivered',
       estimatedArrival: '08:15',
@@ -201,7 +201,9 @@ export default function LogisticsPage() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-600 mb-1">Chi phí</div>
-                    <div className="text-2xl font-bold text-blue-600">{currentRoute.cost.toLocaleString()}₫</div>
+                    <div className="text-2xl font-bold text-blue-600" suppressHydrationWarning>
+                      {currentRoute.cost.toLocaleString('vi-VN')}₫
+                    </div>
                   </div>
                 </div>
 
