@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import TransactionHistory from '@/components/carbon/TransactionHistory';
 import OffsetCalculator from '@/components/carbon/OffsetCalculator';
 import ImpactVisualization from '@/components/carbon/ImpactVisualization';
@@ -10,6 +12,8 @@ import { CarbonTransaction } from '@/types';
 import { apiClient } from '@/lib/api';
 
 export default function CarbonWalletPage() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [balance, setBalance] = useState(0);
   const [totalOffset, setTotalOffset] = useState(0);
   const [totalEarned, setTotalEarned] = useState(0);
@@ -17,8 +21,24 @@ export default function CarbonWalletPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadData();
-  }, []);
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
+
+  useEffect(() => {
+    if (user) {
+      loadData();
+    }
+  }, [user]);
+
+  if (authLoading || !user) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
 
   const loadData = async () => {
     try {

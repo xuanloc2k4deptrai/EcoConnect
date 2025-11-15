@@ -1,13 +1,42 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import ESGScore from '@/components/esg/ESGScore';
 import MetricsCard from '@/components/esg/MetricsCard';
 import { Card, CardHeader, CardBody } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function ESGDashboardPage() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [timeframe, setTimeframe] = useState<'month' | 'quarter' | 'year'>('month');
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    } else if (!authLoading && user && user.userType !== 'business') {
+      router.push('/');
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading || !user || user.userType !== 'business') {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        {authLoading ? (
+          <LoadingSpinner size="lg" />
+        ) : (
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Truy cập bị từ chối</h2>
+            <p className="text-gray-600 mb-6">Tính năng này chỉ dành cho tài khoản doanh nghiệp.</p>
+            <Button onClick={() => router.push('/')}>Về trang chủ</Button>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   // Mock ESG Data
   const esgData = {

@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import ChallengeCard from '@/components/gamification/ChallengeCard';
 import LeaderBoard from '@/components/gamification/LeaderBoard';
 import AchievementBadges from '@/components/gamification/AchievementBadges';
@@ -8,8 +10,24 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { Badge } from '@/types';
 
 export default function ChallengesPage() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [filter, setFilter] = useState<'all' | 'active' | 'upcoming'>('active');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading || !user) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
   
   // Mock challenges data
   const mockChallenges: any[] = [
