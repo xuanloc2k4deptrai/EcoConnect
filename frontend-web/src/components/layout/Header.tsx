@@ -15,6 +15,8 @@ const Header: React.FC = () => {
     { href: '/esg', label: 'Bảng điều khiển ESG' },
     { href: '/carbon-wallet', label: 'Ví Carbon' },
     { href: '/challenges', label: 'Thử thách' },
+    { href: '/product-passport', label: 'Hộ chiếu xanh' },
+    { href: '/logistics', label: 'Logistics AI' },
   ];
 
   return (
