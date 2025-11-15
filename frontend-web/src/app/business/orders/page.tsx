@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Card, CardHeader, CardBody } from '@/components/ui/Card';
@@ -8,6 +8,8 @@ import Button from '@/components/ui/Button';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Badge from '@/components/ui/Badge';
 import Input from '@/components/ui/Input';
+
+export const dynamic = 'force-dynamic';
 
 type OrderStatus = 'pending' | 'confirmed' | 'processing' | 'shipping' | 'delivered' | 'cancelled';
 
@@ -352,7 +354,7 @@ export default function OrdersPage() {
                 {(Object.keys(statusConfig) as Array<OrderStatus | 'all'>).map((status) => (
                   <Button
                     key={status}
-                    variant={selectedStatus === status ? 'default' : 'outline'}
+                    variant={selectedStatus === status ? 'primary' : 'outline'}
                     onClick={() => setSelectedStatus(status)}
                     className="whitespace-nowrap"
                   >
@@ -519,23 +521,21 @@ export default function OrdersPage() {
 
       {/* Order Detail Modal */}
       {selectedOrder && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
           onClick={() => setSelectedOrder(null)}
         >
-          <Card 
-            className="max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">{selectedOrder.orderNumber}</h2>
-                  <p className="text-sm text-gray-600 mt-1">Chi tiết đơn hàng</p>
-                </div>
-                <button
-                  onClick={() => setSelectedOrder(null)}
-                  className="text-gray-400 hover:text-gray-600"
+          <div onClick={(e) => e.stopPropagation()}>
+            <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">{selectedOrder.orderNumber}</h2>
+                    <p className="text-sm text-gray-600 mt-1">Chi tiết đơn hàng</p>
+                  </div>
+                  <button
+                    onClick={() => setSelectedOrder(null)}
+                    className="text-gray-400 hover:text-gray-600"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -617,7 +617,8 @@ export default function OrdersPage() {
                 </div>
               </div>
             </CardBody>
-          </Card>
+            </Card>
+          </div>
         </div>
       )}
     </div>

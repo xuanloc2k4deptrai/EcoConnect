@@ -442,8 +442,8 @@ export default function NewProductPage() {
               >
                 {loading ? (
                   <>
-                    <LoadingSpinner size="sm" className="mr-2" />
-                    Đang tạo...
+                    <LoadingSpinner size="sm" />
+                    <span className="ml-2">Đang tạo...</span>
                   </>
                 ) : (
                   <>

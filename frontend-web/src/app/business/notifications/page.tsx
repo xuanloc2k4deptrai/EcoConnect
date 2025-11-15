@@ -8,6 +8,8 @@ import Button from '@/components/ui/Button';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Badge from '@/components/ui/Badge';
 
+export const dynamic = 'force-dynamic';
+
 type NotificationType = 'order' | 'review' | 'stock' | 'system' | 'esg';
 
 interface Notification {
@@ -270,7 +272,7 @@ export default function NotificationsPage() {
           <CardBody>
             <div className="flex gap-2 overflow-x-auto pb-2">
               <Button
-                variant={selectedFilter === 'all' ? 'default' : 'outline'}
+                variant={selectedFilter === 'all' ? 'primary' : 'outline'}
                 onClick={() => setSelectedFilter('all')}
               >
                 Tất cả
@@ -282,7 +284,7 @@ export default function NotificationsPage() {
               </Button>
               
               <Button
-                variant={selectedFilter === 'unread' ? 'default' : 'outline'}
+                variant={selectedFilter === 'unread' ? 'primary' : 'outline'}
                 onClick={() => setSelectedFilter('unread')}
               >
                 Chưa đọc
@@ -296,7 +298,7 @@ export default function NotificationsPage() {
               {(Object.keys(typeConfig) as NotificationType[]).map((type) => (
                 <Button
                   key={type}
-                  variant={selectedFilter === type ? 'default' : 'outline'}
+                  variant={selectedFilter === type ? 'primary' : 'outline'}
                   onClick={() => setSelectedFilter(type)}
                 >
                   {typeConfig[type].icon} {typeConfig[type].label}

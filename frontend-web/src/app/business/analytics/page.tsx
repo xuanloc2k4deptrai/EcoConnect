@@ -7,6 +7,8 @@ import { Card, CardHeader, CardBody } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
+export const dynamic = 'force-dynamic';
+
 type TimeFrame = 'week' | 'month' | 'quarter' | 'year';
 
 export default function AnalyticsPage() {
@@ -124,7 +126,7 @@ export default function AnalyticsPage() {
           {(['week', 'month', 'quarter', 'year'] as TimeFrame[]).map((tf) => (
             <Button
               key={tf}
-              variant={timeFrame === tf ? 'default' : 'outline'}
+              variant={timeFrame === tf ? 'primary' : 'outline'}
               onClick={() => setTimeFrame(tf)}
             >
               {tf === 'week' ? '7 ngày' : tf === 'month' ? 'Tháng' : tf === 'quarter' ? 'Quý' : 'Năm'}

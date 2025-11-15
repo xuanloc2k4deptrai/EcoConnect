@@ -9,6 +9,8 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Badge from '@/components/ui/Badge';
 import Input from '@/components/ui/Input';
 
+export const dynamic = 'force-dynamic';
+
 interface Review {
   id: string;
   productId: string;
@@ -355,7 +357,7 @@ export default function ReviewsPage() {
                 ].map((filter) => (
                   <Button
                     key={filter.value}
-                    variant={selectedFilter === filter.value ? 'default' : 'outline'}
+                    variant={selectedFilter === filter.value ? 'primary' : 'outline'}
                     onClick={() => setSelectedFilter(filter.value as any)}
                   >
                     {filter.label}
