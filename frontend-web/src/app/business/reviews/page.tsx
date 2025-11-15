@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Card, CardHeader, CardBody } from '@/components/ui/Card';
@@ -127,10 +127,16 @@ export default function ReviewsPage() {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
-  // Check authentication
-  if (!user) {
-    router.push('/login');
+  useEffect(() => {
+    setIsClient(true);
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  if (!isClient || !user) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <LoadingSpinner size="lg" />

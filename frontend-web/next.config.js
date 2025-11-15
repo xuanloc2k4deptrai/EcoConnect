@@ -2,9 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
   images: {
     domains: [
       'localhost',

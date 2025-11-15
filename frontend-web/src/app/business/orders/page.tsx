@@ -177,10 +177,16 @@ export default function OrdersPage() {
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
-  // Check authentication
-  if (!user) {
-    router.push('/login');
+  useEffect(() => {
+    setIsClient(true);
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  if (!isClient || !user) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <LoadingSpinner size="lg" />
