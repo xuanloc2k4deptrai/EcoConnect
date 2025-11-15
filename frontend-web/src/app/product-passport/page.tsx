@@ -8,6 +8,9 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 export default function ProductPassportPage() {
   const [selectedProduct, setSelectedProduct] = useState<string>('');
   const [scanning, setScanning] = useState(false);
+  const [nftInput, setNftInput] = useState('');
+  const [showInputModal, setShowInputModal] = useState(false);
+  const [searching, setSearching] = useState(false);
 
   // Mock product passport data
   const mockPassport = {
@@ -64,6 +67,29 @@ export default function ProductPassportPage() {
       setScanning(false);
       setSelectedProduct('NFT-001-2024');
     }, 2000);
+  };
+
+  const handleSearchNFT = () => {
+    if (!nftInput.trim()) {
+      alert('Vui lòng nhập mã NFT!');
+      return;
+    }
+    setSearching(true);
+    setTimeout(() => {
+      setSearching(false);
+      setSelectedProduct(nftInput);
+      setShowInputModal(false);
+      setNftInput('');
+    }, 1500);
+  };
+
+  const handleViewOnBlockchain = () => {
+    const explorerUrl = `https://mumbai.polygonscan.com/address/${mockPassport.smartContract}`;
+    window.open(explorerUrl, '_blank');
+  };
+
+  const handleDownloadPDF = () => {
+    alert('Chức năng tải PDF sẽ được triển khai sau!\n\nBạn có thể tải hộ chiếu sản phẩm dưới dạng PDF để lưu trữ hoặc chia sẻ.');
   };
 
   return (
@@ -144,7 +170,11 @@ export default function ProductPassportPage() {
                   </>
                 )}
               </Button>
-              <Button variant="outline" className="px-8 py-4 text-lg">
+              <Button 
+                variant="outline" 
+                className="px-8 py-4 text-lg"
+                onClick={() => setShowInputModal(true)}
+              >
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
@@ -153,6 +183,82 @@ export default function ProductPassportPage() {
             </div>
           </div>
         </div>
+
+        {/* NFT Input Modal */}
+        {showInputModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl font-bold text-gray-900">🔍 Tìm kiếm NFT</h3>
+                <button
+                  onClick={() => setShowInputModal(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nhập mã NFT Token ID hoặc Product ID
+                </label>
+                <input
+                  type="text"
+                  value={nftInput}
+                  onChange={(e) => setNftInput(e.target.value)}
+                  placeholder="VD: NFT-001-2024 hoặc 0x7f8c...3d2a"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all"
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearchNFT()}
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  Mã NFT có thể tìm thấy trên nhãn sản phẩm hoặc trong email xác nhận
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowInputModal(false)}
+                  className="flex-1"
+                >
+                  Hủy
+                </Button>
+                <Button
+                  onClick={handleSearchNFT}
+                  disabled={searching || !nftInput.trim()}
+                  className="flex-1"
+                >
+                  {searching ? (
+                    <>
+                      <LoadingSpinner size="sm" />
+                      <span className="ml-2">Đang tìm...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      Tìm kiếm
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <div className="text-sm text-gray-600">
+                  <div className="font-semibold mb-2">💡 Gợi ý:</div>
+                  <ul className="space-y-1 text-xs">
+                    <li>• Thử với: <code className="bg-gray-100 px-2 py-1 rounded">NFT-001-2024</code></li>
+                    <li>• Hoặc: <code className="bg-gray-100 px-2 py-1 rounded">NFT-002-2024</code></li>
+                    <li>• Mỗi sản phẩm có một NFT duy nhất trên blockchain</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Product Passport Details */}
         {selectedProduct && (
@@ -207,21 +313,51 @@ export default function ProductPassportPage() {
                 </div>
 
                 {/* Blockchain Info */}
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <h3 className="text-lg font-bold mb-3">🔗 Thông tin Blockchain</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Smart Contract:</span>
-                      <code className="font-mono text-purple-600">{mockPassport.smartContract}</code>
+                <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 border-2 border-purple-200">
+                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                    🔗 Thông tin Blockchain
+                  </h3>
+                  <div className="space-y-3 text-sm">
+                    <div className="bg-white rounded-lg p-3">
+                      <div className="text-gray-600 mb-1">Smart Contract:</div>
+                      <code className="font-mono text-purple-600 text-xs break-all">{mockPassport.smartContract}</code>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">IPFS Hash:</span>
-                      <code className="font-mono text-purple-600">{mockPassport.ipfsHash}</code>
+                    <div className="bg-white rounded-lg p-3">
+                      <div className="text-gray-600 mb-1">IPFS Hash:</div>
+                      <code className="font-mono text-purple-600 text-xs break-all">{mockPassport.ipfsHash}</code>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Network:</span>
-                      <span className="font-semibold">Polygon Mumbai Testnet</span>
+                    <div className="bg-white rounded-lg p-3">
+                      <div className="text-gray-600 mb-1">Network:</div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold">Polygon Mumbai Testnet</span>
+                        <span className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-semibold">TESTNET</span>
+                      </div>
                     </div>
+                  </div>
+                  
+                  <div className="mt-4 flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleViewOnBlockchain}
+                      className="flex-1"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                      Xem trên PolygonScan
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={handleDownloadPDF}
+                      className="flex-1"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Tải PDF
+                    </Button>
                   </div>
                 </div>
               </div>

@@ -6,6 +6,14 @@ import Button from '@/components/ui/Button';
 
 export default function LogisticsPage() {
   const [selectedRoute, setSelectedRoute] = useState<'optimized' | 'fastest' | 'greenest'>('optimized');
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [calcWeight, setCalcWeight] = useState('');
+  const [calcDistance, setCalcDistance] = useState('');
+  const [calcVehicle, setCalcVehicle] = useState('electric');
+  const [carbonResult, setCarbonResult] = useState<number | null>(null);
+  const [showCustomRoute, setShowCustomRoute] = useState(false);
+  const [customStart, setCustomStart] = useState('');
+  const [customEnd, setCustomEnd] = useState('');
 
   // Mock logistics data
   const routes = {
@@ -52,6 +60,44 @@ export default function LogisticsPage() {
   };
 
   const currentRoute = routes[selectedRoute];
+
+  const handleCalculateCarbon = () => {
+    const weight = parseFloat(calcWeight);
+    const distance = parseFloat(calcDistance);
+    
+    if (!weight || !distance || weight <= 0 || distance <= 0) {
+      alert('Vui lòng nhập đầy đủ thông tin hợp lệ!');
+      return;
+    }
+
+    // Carbon emission factors (kg CO2 per km per ton)
+    const factors: Record<string, number> = {
+      electric: 0.0,
+      hybrid: 0.12,
+      diesel: 0.27,
+      gas: 0.25,
+    };
+
+    const emissionFactor = factors[calcVehicle] || 0.25;
+    const totalEmission = (weight / 1000) * distance * emissionFactor;
+    setCarbonResult(totalEmission);
+  };
+
+  const handlePlanCustomRoute = () => {
+    if (!customStart.trim() || !customEnd.trim()) {
+      alert('Vui lòng nhập điểm đi và điểm đến!');
+      return;
+    }
+    alert(`Đang tối ưu hóa tuyến đường:\n\nTừ: ${customStart}\nĐến: ${customEnd}\n\nChức năng này sẽ tích hợp Google Maps API để tính toán tuyến đường tối ưu!`);
+  };
+
+  const handleExportPlan = () => {
+    alert('Chức năng xuất kế hoạch sẽ được triển khai sau!\n\nBạn có thể xuất:\n- PDF route plan\n- Excel shipment list\n- JSON data export');
+  };
+
+  const handleTrackShipment = (id: string) => {
+    alert(`Tracking shipment ${id}\n\nChức năng theo dõi real-time sẽ hiển thị:\n- Vị trí hiện tại trên bản đồ\n- ETA cập nhật\n- Lịch sử di chuyển\n- Thông tin tài xế`);
+  };
 
   // Mock shipments
   const mockShipments = [
@@ -132,11 +178,68 @@ export default function LogisticsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Route Optimization */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Custom Route Planner */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold flex items-center gap-3">
+                  <span className="text-3xl">📍</span>
+                  <span>Lập kế hoạch tùy chỉnh</span>
+                </h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPlan}
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Xuất kế hoạch
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    📍 Điểm đi
+                  </label>
+                  <input
+                    type="text"
+                    value={customStart}
+                    onChange={(e) => setCustomStart(e.target.value)}
+                    placeholder="VD: Kho trung tâm TP.HCM"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    🎯 Điểm đến
+                  </label>
+                  <input
+                    type="text"
+                    value={customEnd}
+                    onChange={(e) => setCustomEnd(e.target.value)}
+                    placeholder="VD: Quận Thủ Đức, TP.HCM"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                  />
+                </div>
+              </div>
+
+              <Button
+                onClick={handlePlanCustomRoute}
+                className="w-full bg-gradient-to-r from-green-600 to-teal-600"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+                Tối ưu hóa bằng AI
+              </Button>
+            </div>
+
             {/* Route Selection */}
             <div className="bg-white rounded-2xl shadow-xl p-6">
               <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                 <span className="text-3xl">🗺️</span>
-                <span>Tối ưu hóa tuyến đường</span>
+                <span>Tuyến đường được đề xuất</span>
               </h2>
 
               {/* Route Options */}
@@ -351,10 +454,16 @@ export default function LogisticsPage() {
                     </div>
                     <div className="font-semibold text-gray-900 mb-1">{shipment.customer}</div>
                     <div className="text-sm text-gray-600 mb-2">{shipment.destination}</div>
-                    <div className="flex items-center justify-between text-xs">
+                    <div className="flex items-center justify-between text-xs mb-2">
                       <span className="text-gray-500">🚗 {shipment.vehicle}</span>
                       <span className="text-green-600 font-semibold">-{shipment.carbonSaved} kg CO₂</span>
                     </div>
+                    <button
+                      onClick={() => handleTrackShipment(shipment.id)}
+                      className="w-full mt-2 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold rounded transition-colors"
+                    >
+                      📍 Theo dõi real-time
+                    </button>
                   </div>
                 ))}
               </div>
@@ -362,6 +471,85 @@ export default function LogisticsPage() {
               <Button variant="outline" className="w-full mt-4">
                 Xem tất cả đơn hàng
               </Button>
+            </div>
+
+            {/* Carbon Calculator */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <span className="text-2xl">🧮</span>
+                <span>Carbon Calculator</span>
+              </h2>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    ⚖️ Trọng lượng (kg)
+                  </label>
+                  <input
+                    type="number"
+                    value={calcWeight}
+                    onChange={(e) => setCalcWeight(e.target.value)}
+                    placeholder="VD: 50"
+                    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    📏 Khoảng cách (km)
+                  </label>
+                  <input
+                    type="number"
+                    value={calcDistance}
+                    onChange={(e) => setCalcDistance(e.target.value)}
+                    placeholder="VD: 45"
+                    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    🚗 Loại xe
+                  </label>
+                  <select
+                    value={calcVehicle}
+                    onChange={(e) => setCalcVehicle(e.target.value)}
+                    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                  >
+                    <option value="electric">⚡ Xe điện (0% CO₂)</option>
+                    <option value="hybrid">🔋 Xe hybrid</option>
+                    <option value="diesel">⛽ Xe diesel</option>
+                    <option value="gas">⛽ Xe xăng</option>
+                  </select>
+                </div>
+
+                <Button
+                  onClick={handleCalculateCarbon}
+                  className="w-full bg-green-600"
+                  disabled={!calcWeight || !calcDistance}
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                  Tính phát thải CO₂
+                </Button>
+
+                {carbonResult !== null && (
+                  <div className="mt-4 p-4 bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                        <span className="text-2xl">🌱</span>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-600">Tổng phát thải dự kiến</div>
+                        <div className="text-3xl font-bold text-green-600">
+                          {carbonResult.toFixed(2)} kg CO₂
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Carbon Savings */}
