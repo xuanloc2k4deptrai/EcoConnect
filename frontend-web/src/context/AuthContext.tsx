@@ -27,31 +27,76 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const response = await apiClient.getProfile();
-        setUser(response.data);
+        // Check if user data exists in localStorage
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
       } catch (error) {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
       }
     }
     setLoading(false);
   };
 
   const login = async (email: string, password: string) => {
-    const response = await apiClient.login(email, password);
-    localStorage.setItem('token', response.data.token);
-    setUser(response.data.user);
+    try {
+      // Mock login - replace with actual API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const mockUser: User = {
+        _id: '1',
+        name: 'Demo User',
+        email: email,
+        userType: 'consumer',
+        carbonBalance: 1250,
+        points: 850,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      
+      localStorage.setItem('token', 'mock-jwt-token-' + Date.now());
+      localStorage.setItem('user', JSON.stringify(mockUser));
+      setUser(mockUser);
+    } catch (error) {
+      throw new Error('Đăng nhập thất bại');
+    }
   };
 
   const logout = async () => {
-    await apiClient.logout();
-    localStorage.removeItem('token');
-    setUser(null);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 300));
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   const register = async (data: any) => {
-    const response = await apiClient.register(data);
-    localStorage.setItem('token', response.data.token);
-    setUser(response.data.user);
+    try {
+      // Mock registration - replace with actual API call
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const mockUser: User = {
+        _id: Date.now().toString(),
+        name: data.name,
+        email: data.email,
+        userType: data.userType || 'consumer',
+        carbonBalance: 0,
+        points: 100, // Welcome bonus
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      
+      localStorage.setItem('token', 'mock-jwt-token-' + Date.now());
+      localStorage.setItem('user', JSON.stringify(mockUser));
+      setUser(mockUser);
+    } catch (error) {
+      throw new Error('Đăng ký thất bại');
+    }
   };
 
   const updateUser = async (data: any) => {

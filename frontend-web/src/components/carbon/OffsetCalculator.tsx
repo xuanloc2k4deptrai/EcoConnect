@@ -63,8 +63,8 @@ const OffsetCalculator: React.FC<OffsetCalculatorProps> = ({ onOffset, currentBa
     const amount = parseFloat(buyAmount);
     if (amount > 0) {
       const totalCost = amount * CREDIT_PRICE;
-      if (window.confirm(`Mua ${amount} kg CO₂ credits với giá ${formatCurrency(totalCost)}?`)) {
-        alert('Chức năng mua credits sẽ được tích hợp sau!\n\nBạn đã chọn mua: ' + amount + ' kg CO₂');
+      if (window.confirm('Mua ' + amount + ' kg CO2 credits voi gia ' + formatCurrency(totalCost) + '?')) {
+        alert('Chuc nang mua credits se duoc tich hop sau!\n\nBan da chon mua: ' + amount + ' kg CO2');
         setBuyAmount('');
       }
     }
@@ -230,9 +230,7 @@ const OffsetCalculator: React.FC<OffsetCalculatorProps> = ({ onOffset, currentBa
                     </div>
                   </button>
                 ))}
-            </div>
-          </div>
-
+              </div>
             </div>
 
             {/* Custom Amount Input */}
