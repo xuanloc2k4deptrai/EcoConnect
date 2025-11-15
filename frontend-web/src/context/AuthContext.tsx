@@ -85,11 +85,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         name: data.name,
         email: data.email,
         userType: data.userType || 'consumer',
+        phone: data.phone,
         carbonBalance: 0,
-        points: 100, // Welcome bonus
+        points: data.userType === 'business' ? 500 : 100, // Higher welcome bonus for business
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
+
+      // Add business fields if applicable
+      if (data.userType === 'business') {
+        mockUser.companyName = data.companyName;
+        mockUser.taxCode = data.taxCode;
+        mockUser.businessAddress = data.businessAddress;
+        mockUser.businessType = data.businessType;
+        mockUser.website = data.website;
+      }
       
       localStorage.setItem('token', 'mock-jwt-token-' + Date.now());
       localStorage.setItem('user', JSON.stringify(mockUser));

@@ -224,18 +224,73 @@ export default function ProfilePage() {
                   </form>
                 ) : (
                   <div className="space-y-4">
+                    {user.userType === 'business' && user.companyName && (
+                      <div className="p-4 bg-blue-50 border-2 border-blue-200 rounded-xl mb-4">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-2xl">🏢</span>
+                          <h4 className="font-semibold text-gray-900">Thông tin doanh nghiệp</h4>
+                        </div>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="text-sm text-gray-500">Tên công ty</label>
+                            <div className="text-gray-900 font-medium mt-1">{user.companyName}</div>
+                          </div>
+                          {user.taxCode && (
+                            <div>
+                              <label className="text-sm text-gray-500">Mã số thuế</label>
+                              <div className="text-gray-900 font-medium mt-1">{user.taxCode}</div>
+                            </div>
+                          )}
+                          {user.businessAddress && (
+                            <div>
+                              <label className="text-sm text-gray-500">Địa chỉ</label>
+                              <div className="text-gray-900 font-medium mt-1">{user.businessAddress}</div>
+                            </div>
+                          )}
+                          {user.businessType && (
+                            <div>
+                              <label className="text-sm text-gray-500">Loại hình</label>
+                              <div className="text-gray-900 font-medium mt-1">
+                                {user.businessType === 'retail' && 'Bán lẻ'}
+                                {user.businessType === 'wholesale' && 'Bán sỉ'}
+                                {user.businessType === 'manufacturer' && 'Sản xuất'}
+                                {user.businessType === 'service' && 'Dịch vụ'}
+                                {user.businessType === 'other' && 'Khác'}
+                              </div>
+                            </div>
+                          )}
+                          {user.website && (
+                            <div>
+                              <label className="text-sm text-gray-500">Website</label>
+                              <div className="text-gray-900 font-medium mt-1">
+                                <a href={user.website} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
+                                  {user.website}
+                                </a>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    
                     <div>
-                      <label className="text-sm text-gray-500">Họ và tên</label>
+                      <label className="text-sm text-gray-500">{user.userType === 'business' ? 'Người đại diện' : 'Họ và tên'}</label>
                       <div className="text-gray-900 font-medium mt-1">{user.name}</div>
                     </div>
                     <div>
                       <label className="text-sm text-gray-500">Email</label>
                       <div className="text-gray-900 font-medium mt-1">{user.email}</div>
                     </div>
+                    {user.phone && (
+                      <div>
+                        <label className="text-sm text-gray-500">Số điện thoại</label>
+                        <div className="text-gray-900 font-medium mt-1">{user.phone}</div>
+                      </div>
+                    )}
                     <div>
                       <label className="text-sm text-gray-500">Loại tài khoản</label>
                       <div className="text-gray-900 font-medium mt-1">
-                        {user.userType === 'business' ? 'Doanh nghiệp' : 'Người tiêu dùng'}
+                        {user.userType === 'business' ? '🏢 Doanh nghiệp' : '👤 Người tiêu dùng'}
                       </div>
                     </div>
                     <div>

@@ -17,7 +17,13 @@ export default function RegisterPage() {
     confirmPassword: '',
     phone: '',
     userType: 'consumer' as 'consumer' | 'business',
-    agreeToTerms: false
+    agreeToTerms: false,
+    // Business fields
+    companyName: '',
+    taxCode: '',
+    businessAddress: '',
+    businessType: '',
+    website: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -36,6 +42,26 @@ export default function RegisterPage() {
     if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
       setError('Vui lòng nhập đầy đủ thông tin bắt buộc');
       return false;
+    }
+
+    // Business validation
+    if (formData.userType === 'business') {
+      if (!formData.companyName) {
+        setError('Vui lòng nhập tên công ty');
+        return false;
+      }
+      if (!formData.taxCode) {
+        setError('Vui lòng nhập mã số thuế');
+        return false;
+      }
+      if (!/^[0-9]{10,13}$/.test(formData.taxCode.replace(/\s|-/g, ''))) {
+        setError('Mã số thuế không hợp lệ (10-13 chữ số)');
+        return false;
+      }
+      if (!formData.businessAddress) {
+        setError('Vui lòng nhập địa chỉ doanh nghiệp');
+        return false;
+      }
     }
 
     if (formData.name.length < 2) {
@@ -58,6 +84,12 @@ export default function RegisterPage() {
       return false;
     }
 
+    // Phone validation
+    if (formData.userType === 'business' && !formData.phone) {
+      setError('Vui lòng nhập số điện thoại doanh nghiệp');
+      return false;
+    }
+    
     if (formData.phone && !/^[0-9]{10}$/.test(formData.phone.replace(/\s/g, ''))) {
       setError('Số điện thoại không hợp lệ (10 chữ số)');
       return false;
@@ -85,16 +117,30 @@ export default function RegisterPage() {
       // Mock registration - replace with actual API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      await register({
+      const registrationData: any = {
         name: formData.name,
         email: formData.email,
         password: formData.password,
         phone: formData.phone,
         userType: formData.userType
-      });
+      };
+
+      // Add business fields if userType is business
+      if (formData.userType === 'business') {
+        registrationData.companyName = formData.companyName;
+        registrationData.taxCode = formData.taxCode;
+        registrationData.businessAddress = formData.businessAddress;
+        registrationData.businessType = formData.businessType;
+        registrationData.website = formData.website;
+      }
+
+      await register(registrationData);
 
       // Show success message
-      alert('Đăng ký thành công! Chào mừng bạn đến với EcoConnect 🌱');
+      const welcomeMessage = formData.userType === 'business' 
+        ? `Đăng ký doanh nghiệp thành công! Chào mừng ${formData.companyName} đến với EcoConnect 🏢🌱`
+        : 'Đăng ký thành công! Chào mừng bạn đến với EcoConnect 🌱';
+      alert(welcomeMessage);
       router.push('/');
     } catch (err: any) {
       setError(err.message || 'Đăng ký thất bại. Vui lòng thử lại.');
@@ -203,11 +249,111 @@ export default function RegisterPage() {
               </div>
             </div>
 
+            {/* Business Fields - Conditionally Rendered */}
+            {formData.userType === 'business' && (
+              <div className="space-y-4 p-4 bg-blue-50 border-2 border-blue-200 rounded-xl">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">🏢</span>
+                  <h3 className="font-semibold text-gray-900">Thông tin doanh nghiệp</h3>
+                </div>
+
+                {/* Company Name */}
+                <div>
+                  <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-2">
+                    Tên công ty <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="companyName"
+                    name="companyName"
+                    type="text"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    className="block w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    placeholder="Công ty TNHH ABC"
+                    disabled={loading}
+                  />
+                </div>
+
+                {/* Tax Code & Business Type */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="taxCode" className="block text-sm font-medium text-gray-700 mb-2">
+                      Mã số thuế <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="taxCode"
+                      name="taxCode"
+                      type="text"
+                      value={formData.taxCode}
+                      onChange={handleChange}
+                      className="block w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      placeholder="0123456789"
+                      disabled={loading}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="businessType" className="block text-sm font-medium text-gray-700 mb-2">
+                      Loại hình kinh doanh
+                    </label>
+                    <select
+                      id="businessType"
+                      name="businessType"
+                      value={formData.businessType}
+                      onChange={handleChange}
+                      className="block w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      disabled={loading}
+                    >
+                      <option value="">Chọn loại hình</option>
+                      <option value="retail">Bán lẻ</option>
+                      <option value="wholesale">Bán sỉ</option>
+                      <option value="manufacturer">Sản xuất</option>
+                      <option value="service">Dịch vụ</option>
+                      <option value="other">Khác</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Business Address */}
+                <div>
+                  <label htmlFor="businessAddress" className="block text-sm font-medium text-gray-700 mb-2">
+                    Địa chỉ doanh nghiệp <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="businessAddress"
+                    name="businessAddress"
+                    type="text"
+                    value={formData.businessAddress}
+                    onChange={handleChange}
+                    className="block w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    placeholder="123 Đường ABC, Quận XYZ, TP. HCM"
+                    disabled={loading}
+                  />
+                </div>
+
+                {/* Website */}
+                <div>
+                  <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-2">
+                    Website
+                  </label>
+                  <input
+                    id="website"
+                    name="website"
+                    type="url"
+                    value={formData.website}
+                    onChange={handleChange}
+                    className="block w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    placeholder="https://example.com"
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Email & Phone */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email <span className="text-red-500">*</span>
+                  Email {formData.userType === 'business' ? 'doanh nghiệp' : ''} <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -222,7 +368,7 @@ export default function RegisterPage() {
                     value={formData.email}
                     onChange={handleChange}
                     className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="email@example.com"
+                    placeholder={formData.userType === 'business' ? 'info@company.com' : 'email@example.com'}
                     disabled={loading}
                   />
                 </div>
@@ -230,7 +376,7 @@ export default function RegisterPage() {
 
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  Số điện thoại
+                  Số điện thoại {formData.userType === 'business' ? <span className="text-red-500">*</span> : ''}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

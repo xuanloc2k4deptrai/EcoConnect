@@ -1,22 +1,34 @@
 // Common Types
 export interface User {
-  id: string;
+  _id?: string;
+  id?: string;
   email: string;
   name: string;
-  role: 'user' | 'seller' | 'admin';
+  role?: 'user' | 'seller' | 'admin';
+  userType?: 'consumer' | 'business';
   avatar?: string;
-  carbonWallet: {
+  phone?: string;
+  carbonBalance?: number;
+  points?: number;
+  // Business specific fields
+  companyName?: string;
+  taxCode?: string;
+  businessAddress?: string;
+  businessType?: string;
+  website?: string;
+  carbonWallet?: {
     balance: number;
     totalOffset: number;
     totalEarned: number;
   };
-  gamification: {
+  gamification?: {
     points: number;
     level: number;
     badges: Badge[];
     streak: number;
   };
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface Product {
