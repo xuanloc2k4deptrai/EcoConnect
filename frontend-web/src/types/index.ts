@@ -58,6 +58,7 @@ export interface Product {
   certifications: string[];
   blockchainVerified: boolean;
   nftTokenId?: number;
+  passportId?: string;
   stock: number;
   sold: number;
   rating: number;

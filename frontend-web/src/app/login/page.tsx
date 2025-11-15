@@ -39,10 +39,17 @@ export default function LoginPage() {
       // Mock login - replace with actual API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Mock successful login
-      if (email === 'demo@ecoconnect.vn' && password === 'demo123') {
+      // Mock successful login with different user types
+      if ((email === 'demo@ecoconnect.vn' && password === 'demo123') ||
+          (email === 'business@ecoconnect.vn' && password === 'business123')) {
         await login(email, password);
-        router.push('/');
+        
+        // Redirect based on user type
+        if (email === 'business@ecoconnect.vn') {
+          router.push('/business/dashboard');
+        } else {
+          router.push('/');
+        }
       } else {
         setError('Email hoặc mật khẩu không chính xác');
       }
@@ -53,9 +60,14 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoLogin = async () => {
-    setEmail('demo@ecoconnect.vn');
-    setPassword('demo123');
+  const handleDemoLogin = (userType: 'consumer' | 'business') => {
+    if (userType === 'business') {
+      setEmail('business@ecoconnect.vn');
+      setPassword('business123');
+    } else {
+      setEmail('demo@ecoconnect.vn');
+      setPassword('demo123');
+    }
     setError('');
   };
 
@@ -183,15 +195,28 @@ export default function LoginPage() {
               )}
             </Button>
 
-            {/* Demo Login */}
-            <button
-              type="button"
-              onClick={handleDemoLogin}
-              className="w-full py-3 px-4 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-600 hover:border-primary-500 hover:text-primary-600 transition-all"
-              disabled={loading}
-            >
-              💡 Dùng tài khoản Demo (demo@ecoconnect.vn / demo123)
-            </button>
+            {/* Demo Login Buttons */}
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={() => handleDemoLogin('consumer')}
+                className="w-full py-3 px-4 border-2 border-dashed border-blue-300 rounded-xl text-sm text-blue-700 hover:border-blue-500 hover:bg-blue-50 transition-all font-medium"
+                disabled={loading}
+              >
+                👤 Đăng nhập Demo Người dùng
+                <div className="text-xs text-blue-600 mt-1">demo@ecoconnect.vn / demo123</div>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => handleDemoLogin('business')}
+                className="w-full py-3 px-4 border-2 border-dashed border-green-300 rounded-xl text-sm text-green-700 hover:border-green-500 hover:bg-green-50 transition-all font-medium"
+                disabled={loading}
+              >
+                🏢 Đăng nhập Demo Doanh nghiệp
+                <div className="text-xs text-green-600 mt-1">business@ecoconnect.vn / business123</div>
+              </button>
+            </div>
           </form>
 
           {/* Divider */}

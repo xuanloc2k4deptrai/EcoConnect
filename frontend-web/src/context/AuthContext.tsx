@@ -45,16 +45,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Mock login - replace with actual API call
       await new Promise(resolve => setTimeout(resolve, 500));
       
+      // Check if this is a business account
+      const isBusiness = email === 'business@ecoconnect.vn';
+      
       const mockUser: User = {
-        _id: '1',
-        name: 'Demo User',
+        _id: isBusiness ? '999' : '1',
+        name: isBusiness ? 'Green Shop Vietnam' : 'Demo User',
         email: email,
-        userType: 'consumer',
-        carbonBalance: 1250,
-        points: 850,
+        userType: isBusiness ? 'business' : 'consumer',
+        carbonBalance: isBusiness ? 5000 : 1250,
+        points: isBusiness ? 2500 : 850,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
+      
+      // Add business-specific fields
+      if (isBusiness) {
+        mockUser.companyName = 'Green Shop Vietnam';
+        mockUser.taxCode = '0123456789';
+        mockUser.businessAddress = '123 Nguyễn Huệ, Quận 1, TP.HCM';
+        mockUser.businessType = 'Sản xuất & Phân phối sản phẩm xanh';
+        mockUser.website = 'https://greenshop.vn';
+      }
       
       localStorage.setItem('token', 'mock-jwt-token-' + Date.now());
       localStorage.setItem('user', JSON.stringify(mockUser));

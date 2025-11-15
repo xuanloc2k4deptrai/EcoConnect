@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import ProductCard from '@/components/marketplace/ProductCard';
 import ProductDetailModal from '@/components/marketplace/ProductDetailModal';
 import FilterBar from '@/components/marketplace/FilterBar';
@@ -11,6 +12,7 @@ import { Product, FilterOptions } from '@/types';
 import { apiClient } from '@/lib/api';
 
 export default function MarketplacePage() {
+  const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -160,6 +162,7 @@ export default function MarketplacePage() {
         },
         certifications: template.certifications,
         blockchainVerified: i % 2 === 0,
+        passportId: i % 2 === 0 ? `NFT-${String(i + 1).padStart(3, '0')}-2024` : undefined,
         stock: 50 + (i * 10),
         sold: i * 20,
         rating: 4 + (i % 10) / 10,
@@ -324,6 +327,7 @@ export default function MarketplacePage() {
                       key={product._id} 
                       product={product}
                       onClick={() => setSelectedProduct(product)}
+                      onViewPassport={(passportId) => router.push(`/passport/${passportId}`)}
                     />
                   ))}
                 </div>
