@@ -16,6 +16,7 @@ const Header: React.FC = () => {
 
   const navItems = [
     { href: '/marketplace', label: 'Chợ xanh' },
+    { href: '/scan', label: '🔍 Quét QR', public: true },
     { href: '/esg', label: 'Bảng điều khiển ESG' },
     { href: '/carbon-wallet', label: 'Ví Carbon' },
     { href: '/challenges', label: 'Thử thách' },
