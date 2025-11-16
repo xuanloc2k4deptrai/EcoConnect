@@ -179,6 +179,31 @@ export default function OrdersPage() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isClient, setIsClient] = useState(false);
 
+  // useMemo hooks must be called before any conditional returns
+  const filteredOrders = useMemo(() => {
+    return orders.filter(order => {
+      const matchesStatus = selectedStatus === 'all' || order.status === selectedStatus;
+      const matchesSearch = 
+        order.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.customer.email.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesStatus && matchesSearch;
+    });
+  }, [orders, selectedStatus, searchQuery]);
+
+  const stats = useMemo(() => {
+    return {
+      total: orders.length,
+      pending: orders.filter(o => o.status === 'pending').length,
+      processing: orders.filter(o => o.status === 'processing' || o.status === 'confirmed').length,
+      shipping: orders.filter(o => o.status === 'shipping').length,
+      delivered: orders.filter(o => o.status === 'delivered').length,
+      revenue: orders
+        .filter(o => o.status === 'delivered')
+        .reduce((sum, o) => sum + o.total, 0),
+    };
+  }, [orders]);
+
   useEffect(() => {
     setIsClient(true);
     if (!user) {
@@ -219,30 +244,6 @@ export default function OrdersPage() {
     delivered: { label: 'Đã giao', color: 'text-green-700', bgColor: 'bg-green-100' },
     cancelled: { label: 'Đã hủy', color: 'text-red-700', bgColor: 'bg-red-100' },
   };
-
-  const filteredOrders = useMemo(() => {
-    return orders.filter(order => {
-      const matchesStatus = selectedStatus === 'all' || order.status === selectedStatus;
-      const matchesSearch = 
-        order.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        order.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        order.customer.email.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesStatus && matchesSearch;
-    });
-  }, [orders, selectedStatus, searchQuery]);
-
-  const stats = useMemo(() => {
-    return {
-      total: orders.length,
-      pending: orders.filter(o => o.status === 'pending').length,
-      processing: orders.filter(o => o.status === 'processing' || o.status === 'confirmed').length,
-      shipping: orders.filter(o => o.status === 'shipping').length,
-      delivered: orders.filter(o => o.status === 'delivered').length,
-      revenue: orders
-        .filter(o => o.status === 'delivered')
-        .reduce((sum, o) => sum + o.total, 0),
-    };
-  }, [orders]);
 
   const handleStatusChange = async (orderId: string, newStatus: OrderStatus) => {
     setLoading(true);

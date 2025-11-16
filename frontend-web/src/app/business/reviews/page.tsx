@@ -129,37 +129,7 @@ export default function ReviewsPage() {
   const [loading, setLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user, router]);
-
-  if (!isClient || !user) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
-  }
-
-  if (user.userType !== 'business') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="max-w-md">
-          <CardBody>
-            <div className="text-center">
-              <div className="text-6xl mb-4">🚫</div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Truy cập bị từ chối</h2>
-              <p className="text-gray-600">Tính năng này chỉ dành cho doanh nghiệp.</p>
-            </div>
-          </CardBody>
-        </Card>
-      </div>
-    );
-  }
-
+  // All hooks must be called before any conditional returns
   const filteredReviews = useMemo(() => {
     return reviews.filter(review => {
       const matchesFilter = 
@@ -194,6 +164,37 @@ export default function ReviewsPage() {
       ratingDistribution,
     };
   }, [reviews]);
+
+  useEffect(() => {
+    setIsClient(true);
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  if (!isClient || !user) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
+  if (user.userType !== 'business') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="max-w-md">
+          <CardBody>
+            <div className="text-center">
+              <div className="text-6xl mb-4">🚫</div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Truy cập bị từ chối</h2>
+              <p className="text-gray-600">Tính năng này chỉ dành cho doanh nghiệp.</p>
+            </div>
+          </CardBody>
+        </Card>
+      </div>
+    );
+  }
 
   const handleReply = async (reviewId: string) => {
     if (!replyContent.trim()) {
