@@ -8,6 +8,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function QRScanPage() {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState('');
   const [manualInput, setManualInput] = useState('');
@@ -17,6 +18,7 @@ export default function QRScanPage() {
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
+    setMounted(true);
     return () => {
       // Cleanup camera stream on unmount
       if (streamRef.current) {
@@ -81,14 +83,18 @@ export default function QRScanPage() {
 
   const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (manualInput.trim()) {
+    if (mounted && manualInput.trim()) {
+      console.log('Manual navigation to passport:', manualInput.trim());
       // Navigate to product passport view
       router.push(`/passport/${manualInput.trim()}`);
     }
   };
 
   const simulateScan = (productId: string) => {
+    if (!mounted) return;
+    
     stopCamera();
+    console.log('Demo scan navigation to passport:', productId);
     router.push(`/passport/${productId}`);
   };
 

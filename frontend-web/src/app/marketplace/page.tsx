@@ -13,6 +13,7 @@ import { apiClient } from '@/lib/api';
 
 export default function MarketplacePage() {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,8 +30,14 @@ export default function MarketplacePage() {
   });
 
   useEffect(() => {
-    loadProducts();
-  }, [filters, pagination.page, searchQuery]);
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      loadProducts();
+    }
+  }, [mounted, filters, pagination.page, searchQuery]);
 
   const loadProducts = async () => {
     try {
@@ -327,7 +334,12 @@ export default function MarketplacePage() {
                       key={product._id} 
                       product={product}
                       onClick={() => setSelectedProduct(product)}
-                      onViewPassport={(passportId) => router.push(`/passport/${passportId}`)}
+                      onViewPassport={(passportId) => {
+                        if (mounted) {
+                          console.log('Navigating to passport:', passportId);
+                          router.push(`/passport/${passportId}`);
+                        }
+                      }}
                     />
                   ))}
                 </div>

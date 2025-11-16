@@ -27,16 +27,22 @@ export default function PassportViewPage() {
   const loadPassportData = async () => {
     try {
       setLoading(true);
+      setError('');
       
-      // Check if params.id exists
+      // Check if params.id exists and normalize it
       if (!params?.id) {
         setError('Mã sản phẩm không hợp lệ');
         setLoading(false);
         return;
       }
 
+      // Normalize params.id (can be string or string[])
+      const productId = Array.isArray(params.id) ? params.id[0] : params.id;
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
+
+      console.log('Loading passport for ID:', productId);
 
       // Mock passport data based on ID
       const mockPassports: Record<string, any> = {
@@ -120,7 +126,7 @@ export default function PassportViewPage() {
         },
       };
 
-      const data = mockPassports[params.id as string];
+      const data = mockPassports[productId];
       
       if (data) {
         setPassport(data);
