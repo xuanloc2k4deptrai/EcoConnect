@@ -9,15 +9,20 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 export default function PassportViewPage() {
   const params = useParams();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [passport, setPassport] = useState<any>(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (params?.id) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && params?.id) {
       loadPassportData();
     }
-  }, [params?.id]);
+  }, [mounted, params?.id]);
 
   const loadPassportData = async () => {
     try {
@@ -129,10 +134,14 @@ export default function PassportViewPage() {
     }
   };
 
-  if (loading) {
+  // Prevent hydration mismatch
+  if (!mounted || loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <LoadingSpinner size="lg" />
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
+        <div className="text-center">
+          <LoadingSpinner size="lg" />
+          <p className="mt-4 text-gray-600">Đang tải thông tin hộ chiếu xanh...</p>
+        </div>
       </div>
     );
   }
