@@ -162,7 +162,7 @@ export default function MarketplacePage() {
         },
         certifications: template.certifications,
         blockchainVerified: i % 2 === 0,
-        passportId: i % 2 === 0 ? `NFT-${String(i + 1).padStart(3, '0')}-2024` : undefined,
+        passportId: i < 3 ? `NFT-${String(i + 1).padStart(3, '0')}-2024` : undefined,
         stock: 50 + (i * 10),
         sold: i * 20,
         rating: 4 + (i % 10) / 10,
