@@ -302,42 +302,42 @@ export default function OrdersPage() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           <Card>
             <CardBody className="text-center">
-              <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+              <div className="text-2xl font-bold text-gray-900" suppressHydrationWarning>{stats.total}</div>
               <div className="text-sm text-gray-600">Tổng đơn</div>
             </CardBody>
           </Card>
           
           <Card>
             <CardBody className="text-center">
-              <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
+              <div className="text-2xl font-bold text-yellow-600" suppressHydrationWarning>{stats.pending}</div>
               <div className="text-sm text-gray-600">Chờ xác nhận</div>
             </CardBody>
           </Card>
           
           <Card>
             <CardBody className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{stats.processing}</div>
+              <div className="text-2xl font-bold text-purple-600" suppressHydrationWarning>{stats.processing}</div>
               <div className="text-sm text-gray-600">Đang xử lý</div>
             </CardBody>
           </Card>
           
           <Card>
             <CardBody className="text-center">
-              <div className="text-2xl font-bold text-orange-600">{stats.shipping}</div>
+              <div className="text-2xl font-bold text-orange-600" suppressHydrationWarning>{stats.shipping}</div>
               <div className="text-sm text-gray-600">Đang giao</div>
             </CardBody>
           </Card>
           
           <Card>
             <CardBody className="text-center">
-              <div className="text-2xl font-bold text-green-600">{stats.delivered}</div>
+              <div className="text-2xl font-bold text-green-600" suppressHydrationWarning>{stats.delivered}</div>
               <div className="text-sm text-gray-600">Đã giao</div>
             </CardBody>
           </Card>
           
           <Card>
             <CardBody className="text-center">
-              <div className="text-xl font-bold text-blue-600">{formatCurrency(stats.revenue)}</div>
+              <div className="text-xl font-bold text-blue-600" suppressHydrationWarning>{formatCurrency(stats.revenue)}</div>
               <div className="text-sm text-gray-600">Doanh thu</div>
             </CardBody>
           </Card>

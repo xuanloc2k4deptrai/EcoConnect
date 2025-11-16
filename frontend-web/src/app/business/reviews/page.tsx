@@ -285,28 +285,28 @@ export default function ReviewsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardBody className="text-center">
-              <div className="text-4xl font-bold text-gray-900 mb-1">{stats.total}</div>
+              <div className="text-4xl font-bold text-gray-900 mb-1" suppressHydrationWarning>{stats.total}</div>
               <div className="text-sm text-gray-600">Tổng đánh giá</div>
             </CardBody>
           </Card>
           
           <Card>
             <CardBody className="text-center">
-              <div className="text-4xl font-bold text-yellow-500 mb-1">{stats.avgRating} ⭐</div>
+              <div className="text-4xl font-bold text-yellow-500 mb-1" suppressHydrationWarning>{stats.avgRating} ⭐</div>
               <div className="text-sm text-gray-600">Điểm trung bình</div>
             </CardBody>
           </Card>
           
           <Card>
             <CardBody className="text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-1">{stats.newReviews}</div>
+              <div className="text-4xl font-bold text-blue-600 mb-1" suppressHydrationWarning>{stats.newReviews}</div>
               <div className="text-sm text-gray-600">Đánh giá mới</div>
             </CardBody>
           </Card>
           
           <Card>
             <CardBody className="text-center">
-              <div className="text-4xl font-bold text-red-600 mb-1">{stats.needsAttention}</div>
+              <div className="text-4xl font-bold text-red-600 mb-1" suppressHydrationWarning>{stats.needsAttention}</div>
               <div className="text-sm text-gray-600">Cần chú ý</div>
             </CardBody>
           </Card>
@@ -318,7 +318,7 @@ export default function ReviewsPage() {
             <h2 className="text-xl font-bold text-gray-900">Phân bố đánh giá</h2>
           </CardHeader>
           <CardBody>
-            <div className="space-y-3">
+            <div className="space-y-3" suppressHydrationWarning>
               {stats.ratingDistribution.map(({ rating, count, percentage }) => (
                 <div key={rating} className="flex items-center gap-4">
                   <div className="w-16 flex items-center gap-1">

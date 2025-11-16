@@ -122,6 +122,35 @@ export default function NotificationsPage() {
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'unread' | NotificationType>('all');
   const [isClient, setIsClient] = useState(false);
 
+  // All hooks must be called before any conditional returns
+  const typeConfig: Record<NotificationType, { label: string; icon: string; color: string }> = {
+    order: { label: 'Đơn hàng', icon: '📦', color: 'text-blue-600 bg-blue-50' },
+    review: { label: 'Đánh giá', icon: '⭐', color: 'text-yellow-600 bg-yellow-50' },
+    stock: { label: 'Tồn kho', icon: '📊', color: 'text-orange-600 bg-orange-50' },
+    system: { label: 'Hệ thống', icon: '⚙️', color: 'text-gray-600 bg-gray-50' },
+    esg: { label: 'ESG', icon: '🌱', color: 'text-green-600 bg-green-50' },
+  };
+
+  const filteredNotifications = useMemo(() => {
+    return notifications.filter(notif => {
+      if (selectedFilter === 'all') return true;
+      if (selectedFilter === 'unread') return !notif.read;
+      return notif.type === selectedFilter;
+    });
+  }, [notifications, selectedFilter]);
+
+  const stats = useMemo(() => {
+    return {
+      total: notifications.length,
+      unread: notifications.filter(n => !n.read).length,
+      high: notifications.filter(n => n.priority === 'high' && !n.read).length,
+      byType: Object.keys(typeConfig).reduce((acc, type) => {
+        acc[type as NotificationType] = notifications.filter(n => n.type === type && !n.read).length;
+        return acc;
+      }, {} as Record<NotificationType, number>),
+    };
+  }, [notifications, typeConfig]);
+
   useEffect(() => {
     setIsClient(true);
     if (!user) {
@@ -153,39 +182,11 @@ export default function NotificationsPage() {
     );
   }
 
-  const typeConfig: Record<NotificationType, { label: string; icon: string; color: string }> = {
-    order: { label: 'Đơn hàng', icon: '📦', color: 'text-blue-600 bg-blue-50' },
-    review: { label: 'Đánh giá', icon: '⭐', color: 'text-yellow-600 bg-yellow-50' },
-    stock: { label: 'Tồn kho', icon: '📊', color: 'text-orange-600 bg-orange-50' },
-    system: { label: 'Hệ thống', icon: '⚙️', color: 'text-gray-600 bg-gray-50' },
-    esg: { label: 'ESG', icon: '🌱', color: 'text-green-600 bg-green-50' },
-  };
-
   const priorityConfig = {
     low: { color: 'border-gray-300 bg-white', badge: '' },
     medium: { color: 'border-blue-300 bg-blue-50', badge: 'bg-blue-100 text-blue-700' },
     high: { color: 'border-red-300 bg-red-50', badge: 'bg-red-100 text-red-700' },
   };
-
-  const filteredNotifications = useMemo(() => {
-    return notifications.filter(notif => {
-      if (selectedFilter === 'all') return true;
-      if (selectedFilter === 'unread') return !notif.read;
-      return notif.type === selectedFilter;
-    });
-  }, [notifications, selectedFilter]);
-
-  const stats = useMemo(() => {
-    return {
-      total: notifications.length,
-      unread: notifications.filter(n => !n.read).length,
-      high: notifications.filter(n => n.priority === 'high' && !n.read).length,
-      byType: Object.keys(typeConfig).reduce((acc, type) => {
-        acc[type as NotificationType] = notifications.filter(n => n.type === type && !n.read).length;
-        return acc;
-      }, {} as Record<NotificationType, number>),
-    };
-  }, [notifications]);
 
   const handleMarkAsRead = (id: string) => {
     setNotifications(prev => prev.map(notif => 
