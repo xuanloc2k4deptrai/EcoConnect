@@ -14,12 +14,22 @@ export default function PassportViewPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    loadPassportData();
-  }, [params.id]);
+    if (params?.id) {
+      loadPassportData();
+    }
+  }, [params?.id]);
 
   const loadPassportData = async () => {
     try {
       setLoading(true);
+      
+      // Check if params.id exists
+      if (!params?.id) {
+        setError('Mã sản phẩm không hợp lệ');
+        setLoading(false);
+        return;
+      }
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
 
